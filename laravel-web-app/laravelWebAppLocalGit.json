@@ -9,6 +9,13 @@
                 "description": "Web app name."
             }
         },
+        "deploymentUser": {
+            "defaultValue": "deployment-user",
+            "type": "string",
+            "metadata": {
+                "description": "Deployment user name."
+            }
+        },
         "appServicePlan": {
             "type": "string",
             "allowedValues": [
@@ -62,7 +69,7 @@
             "location": "[resourceGroup().location]",
             "properties": {
                 "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', concat(parameters('appName'), '-service-plan'))]",
-                "siteConfig":{
+                "siteConfig": {
                     "phpVersion": "7.0",
                     "appSettings": [
                         {
@@ -79,21 +86,12 @@
                             "virtualPath": "/",
                             "physicalPath": "site\\public"
                         }
-                    ]
+                    ],
+                    "scmType": "LocalGit",
+                    "publishingUsername": "[parameters('deploymentUser')]"
                 }
             },
             "resources": [
-                {
-                    "name": "appSourceControl",
-                    "type": "sourcecontrols",
-                    "apiVersion": "2015-08-01",
-                    "dependsOn": [
-                        "[resourceId('Microsoft.Web/sites', parameters('appName'))]"
-                    ],
-                    "properties": {
-                        "sourceType": "VsoGit"
-                    }
-                },
                 {
                     "name": "ComposerExtension",
                     "type": "siteextensions",
@@ -111,5 +109,11 @@
                 "[resourceId('Microsoft.Web/serverfarms', concat(parameters('appName'), '-service-plan'))]"
             ]
         }
-    ]
+    ],
+    "outputs": {
+        "web app url": {
+            "type": "string",
+            "value": "[concat('http://', parameters('appName'), '.azurewebsites.net')]"
+        }
+    }
 }
