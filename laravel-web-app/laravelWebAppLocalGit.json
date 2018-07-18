@@ -54,7 +54,7 @@
                 "name": "[parameters('appServicePlan')]",
                 "capacity": "[parameters('workerSize')]"
             }
-        }, // service plan
+        },
         {
             "type": "Microsoft.Web/sites",
             "name": "[parameters('appName')]",
@@ -67,17 +67,19 @@
                     "appSettings": [
                         {
                             "name": "SCM_REPOSITORY_PATH",
-                            "value": "..\repository"
+                            "value": "..\\repository"
                         },
                         {
                             "name": "SCM_TARGET_PATH",
                             "value": ".."
                         }
                     ],
-                    "virtualApplications": {
-                        "virtualPath": "/",
-                        "physicalPath": "site\\public"
-                    }
+                    "virtualApplications": [
+                        {
+                            "virtualPath": "/",
+                            "physicalPath": "site\\public"
+                        }
+                    ]
                 }
             },
             "resources": [
